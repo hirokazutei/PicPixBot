@@ -5,8 +5,11 @@
 
 ## What is it?
 
-His Twitter is @PicPixBot, you can tweet a picture at him, tell him the parameters and he will turn that picture into a pixel art.
+His Twitter is @PicPixBot hosted on Amazon EC2.
+You can tweet a picture at him, tell him the parameters and he will turn that picture into a pixel art.
 Instructions are on his pinned tweet.
+
+## How does it work?
 Using node.js, the program uses the stream function to be activated when someone tweet @ the bot. If the tweet comes with an image, that image is saved, processed by [Processing](https://processing.org/), and tweeted with a mention to the original user. If the specified parameters are written wrong or blank, the bot will set random parameters.
 
 #### Parameters
@@ -40,4 +43,5 @@ I figured it would be just as fun to have a TwitterBot online that would pixeliz
 
 If you find any bugs, or have any suggestion for the program, shoot me a message.
 
+## Special Thanks
 
