@@ -30,7 +30,7 @@ To keep it simple, only 3 parameters were introduced.
 
 ## Contribution
 
-Contrubution documentation can be found [HERE](https://github.com/kazuyalegrey/PicPixBot/blob/master/CONTRIBUTION.md).
+Contrubution documentation can be found [HERE](https://github.com/hirokazutei/PicPixBot/blob/master/CONTRIBUTION.md).
 
 ## Why it was made?
 
