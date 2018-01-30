@@ -10,8 +10,8 @@ Instructions are on his pinned tweet.
 Using node.js, the program uses the stream function to be activated when someone tweet @ the bot. If the tweet comes with an image, that image is saved, processed by [Processing](https://processing.org/), and tweeted with a mention to the original user. If the specified parameters are written wrong or blank, the bot will set random parameters.
 
 #### Parameters
-To keep it simple, only 3 parameters were introduced:
-A. Pixel Type
+To keep it simple, only 3 parameters were introduced.
+##### A. Pixel Type
   0. Color Palette
   1. Square Pixels
   2. Triangles in Horizontal Orientation
@@ -22,9 +22,9 @@ A. Pixel Type
   7. Rectangles in Vertical Orientation
   8. Stretched Hexagons
   9. Custom Arranged
-B. Pixel Size
+##### B. Pixel Size
   Controls the size of the pixels.
-C. Pixel Color Number
+##### C. Pixel Color Number
   The number of colors the program attempts to cluster the available colors of the picture into. The larger the number, the wider range of colors will be used, while 2 will be a binary image of two colors.
 
 
