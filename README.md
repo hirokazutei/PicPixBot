@@ -12,6 +12,8 @@ Instructions are on his pinned tweet.
 ## How does it work?
 Using node.js, the program uses the stream function to be activated when someone tweet @ the bot. If the tweet comes with an image, that image is saved, processed by [Processing](https://processing.org/), and tweeted with a mention to the original user. If the specified parameters are written wrong or blank, the bot will set random parameters.
 
+Note that in order for the program to successfully connect to the Twitter API, you need your own keys in a file and you also need the TWIT library.
+
 #### Parameters
 To keep it simple, only 3 parameters were introduced.
 ##### A. Pixel Type
