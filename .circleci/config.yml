@@ -38,22 +38,20 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
+            pip freeze
+            python --version
       
       - run:
           name: install dependencies
           command: |
-            python3 -m venv venv
             . venv/bin/activate
-            pip3 freeze
-            python --version
-            sudo pip3 install --upgrade pip
-            sudo pip3 install Django
-            sudo pip3 install django-webtest
-            sudo pip3 install psycopg2
-            sudo pip3 install pytest
-            sudo pip3 install pytest-django
-            sudo pip3 install virtualenv
-            sudo pip3 install WebTest
+            sudo pip install --upgrade pip
+            sudo pip install Django
+            sudo pip install django-webtest
+            sudo pip install psycopg2
+            sudo pip install pytest
+            sudo pip install pytest-django
+            sudo pip install WebTest
 
             #       pip install -r ../../requirements.txt
 
@@ -71,7 +69,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            python3 manage.py test
+            python manage.py test
 
       - store_artifacts:
           path: test-reports
