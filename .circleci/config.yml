@@ -38,12 +38,12 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
 
-       - run:
-           name: check installed libraries and versions
-           command: |
-             . venv/bin/activate
-             pip freeze
-             python --version
+      - run:
+          name: check installed libraries and versions
+          command: |
+            . venv/bin/activate
+            pip freeze
+            python --version
 
       - run:
           name: install dependencies
