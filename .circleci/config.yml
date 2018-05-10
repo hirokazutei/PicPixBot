@@ -48,15 +48,16 @@ jobs:
           name: install dependencies
           command: |
             . venv/bin/activate
-            sudo pip3 install --upgrade pip
-            sudo pip3 install Django
-            sudo pip3 install django-webtest
-            sudo pip3 install psycopg2
-            sudo pip3 install pytest
-            sudo pip3 install pytest-django
-            sudo pip3 install WebTest
+            #sudo pip3 install -r requirements.txt
+            #sudo pip3 install --upgrade pip
+            #sudo pip3 install Django
+            #sudo pip3 install django-webtest
+            #sudo pip3 install psycopg2
+            #sudo pip3 install pytest
+            #sudo pip3 install pytest-django
+            #sudo pip3 install WebTest
 
-#       pip install -r ../../requirements.txt
+#       pip install -r requirements.txt
 
       - save_cache:
           paths:
