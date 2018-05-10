@@ -42,6 +42,7 @@ jobs:
       - run:
           name: install dependencies
           command: |
+            python3 -m venv venv
             . venv/bin/activate
             pip3 freeze
             python --version
