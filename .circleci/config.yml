@@ -38,6 +38,10 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
+      
+      - run:
+          name: check if anything has been preinstalled
+          command: |
             pip3 freeze
 
       - run:
