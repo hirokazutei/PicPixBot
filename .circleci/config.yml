@@ -15,7 +15,7 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/postgres:9.4
 
-    working_directory: ~/repo
+        #working_directory: ~/repo
 
     steps:
       - checkout
@@ -26,13 +26,33 @@ jobs:
           - v1-dependencies-{{ checksum "requirements.txt" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
+      
+      - run:
+          name: checking current working directory
+          command: |
+            pwd
+
+      - run:
+          name: run virtual environments
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
 
       - run:
           name: install dependencies
           command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
+            sudo chmod +x
+            pip install --upgrade pip
+            pip install Django==2.0.5
+            pip install django-webtest==1.9.3
+            pip install psycopg2==2.7.4
+            pip install py==1.5.3
+            pip install pytest==3.5.1
+            pip install pytest-django==3.2.1
+            pip install virtualenv==15.2.0
+            pip install WebTest==2.0.29
+
+            #       pip install -r ../../requirements.txt
 
       - save_cache:
           paths:
