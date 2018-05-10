@@ -1,0 +1,17 @@
+attrs==18.1.0
+beautifulsoup4==4.6.0
+Django==2.0.5
+django-webtest==1.9.3
+more-itertools==4.1.0
+pluggy==0.6.0
+psycopg2==2.7.4
+py==1.5.3
+pytest==3.5.1
+pytest-django==3.2.1
+pytz==2018.4
+six==1.11.0
+tox==3.0.0
+virtualenv==15.2.0
+waitress==1.1.0
+WebOb==1.8.1
+WebTest==2.0.29
