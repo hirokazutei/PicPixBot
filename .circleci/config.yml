@@ -31,24 +31,26 @@ jobs:
           name: checking current working directory
           command: |
             pwd
+            
 
       - run:
           name: run virtual environments
           command: |
             python3 -m venv venv
             . venv/bin/activate
+            pip3 freeze
 
       - run:
           name: install dependencies
           command: |
-            sudo pip install --upgrade pip
-            sudo pip install Django==2.0.5
-            sudo pip install django-webtest==1.9.3
-            sudo pip install psycopg2
-            sudo pip install pytest==3.5.1
-            sudo pip install pytest-django==3.2.1
-            sudo pip install virtualenv==15.2.0
-            sudo pip install WebTest==2.0.29
+            sudo pip3 install --upgrade pip
+            sudo pip3 install Django
+            sudo pip3 install django-webtest
+            sudo pip3 install psycopg2
+            sudo pip3 install pytest
+            sudo pip3 install pytest-django
+            sudo pip3 install virtualenv
+            sudo pip3 install WebTest
 
             #       pip install -r ../../requirements.txt
 
@@ -66,7 +68,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            python manage.py test
+            python3 manage.py test
 
       - store_artifacts:
           path: test-reports
