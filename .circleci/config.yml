@@ -41,16 +41,16 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            sudo chmod +x
-            pip install --upgrade pip
-            pip install Django==2.0.5
-            pip install django-webtest==1.9.3
-            pip install psycopg2==2.7.4
-            pip install py==1.5.3
-            pip install pytest==3.5.1
-            pip install pytest-django==3.2.1
-            pip install virtualenv==15.2.0
-            pip install WebTest==2.0.29
+                  # sudo chmod +x
+            sudo pip install --upgrade pip
+            sudo pip install Django==2.0.5
+            sudo pip install django-webtest==1.9.3
+            sudo pip install psycopg2==2.7.4
+            sudo pip install py==1.5.3
+            sudo pip install pytest==3.5.1
+            sudo pip install pytest-django==3.2.1
+            sudo pip install virtualenv==15.2.0
+            sudo pip install WebTest==2.0.29
 
             #       pip install -r ../../requirements.txt
 
