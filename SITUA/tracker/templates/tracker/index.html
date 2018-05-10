@@ -1,0 +1,11 @@
+{% if building_list %}
+    <ul>
+    {% for building in building_list %}
+        <!--The url portion removes hard coded urls-->
+        <!--The url portion refers to the url.py's namespace-->    
+        <li><a href="{% url 'tracker:build_view' building.pk %}">{{ building.name }} - {{ building.affiliation}}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
