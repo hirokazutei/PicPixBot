@@ -42,9 +42,7 @@ jobs:
           name: check installed libraries and versions
           command: |
             . venv/bin/activate
-            #pip freeze
-            #python --version
-            echo ok
+            python3 --version
 
       - run:
           name: install dependencies
