@@ -40,13 +40,11 @@ jobs:
             . venv/bin/activate
       
       - run:
-          name: check if anything has been preinstalled
-          command: |
-            pip3 freeze
-
-      - run:
           name: install dependencies
           command: |
+            . venv/bin/activate
+            pip freeze
+            python --version
             sudo pip3 install --upgrade pip
             sudo pip3 install Django
             sudo pip3 install django-webtest
