@@ -28,7 +28,7 @@ jobs:
           name: checking current working directory
           command: |
             pwd
-            sudo apt-get install python-psycopg2
+            sudo apt-get install python3-psycopg2
 
       - run:
           name: run virtual environments
