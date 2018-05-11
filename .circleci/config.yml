@@ -28,13 +28,12 @@ jobs:
           - v2-dependencies-
       
       - run:
-          name: checking current working directory
+          name: Installing Psycopg Outside Environment Just in Case
           command: |
-            pwd
             sudo apt-get install python3-psycopg2
 
       - run:
-          name: run virtual environments
+          name: Run Virtual Environment and Install Requirements
           command: |
             python3 -m venv venv && . venv/bin/activate && python3 -m pip install -r requirements.txt
 
@@ -48,7 +47,7 @@ jobs:
       # https://pytest.org
       # https://nose.readthedocs.io
       - run:
-          name: run tests
+          name: Run Them Tests
           command: |
             . venv/bin/activate && python3 manage.py test
 
