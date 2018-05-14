@@ -8,7 +8,7 @@ from .models import Event
 # Create your tests here.
 class QuestionMethodTests(TestCase):
     def test_returning_false(self):
-        return true
+        return True
 """
 	errors = error_view.get_queryset(Event)
         for error in errors:
