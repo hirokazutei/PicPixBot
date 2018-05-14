@@ -49,7 +49,7 @@ jobs:
       - run:
           name: Run Them Tests
           command: |
-            . venv/bin/activate && python3 manage.py test && flake8
+            . venv/bin/activate && python3 manage.py test && flake8 ./ --max-line-length=120 && flake8
 
       - store_artifacts:
           path: test-reports
