@@ -1,0 +1,22 @@
+{
+  "name": "PicPixBot",
+  "version": "1.0.0",
+  "description": "I take pictures from twitter and process them into pixel art!",
+  "main": "picPixBot.js",
+  "scripts": {
+    "start": "node picPixBot.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "twitter",
+    "bot",
+    "image",
+    "processing",
+    "pixels"
+  ],
+  "author": "Kazuya",
+  "license": "ISC",
+  "dependencies": {
+    "twit": "^2.2.9"
+  }
+}
