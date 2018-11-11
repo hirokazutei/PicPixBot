@@ -1,22 +1,30 @@
 {
-  "name": "PicPixBot",
+  "name": "picpixbot",
   "version": "1.0.0",
-  "description": "I take pictures from twitter and process them into pixel art!",
-  "main": "picPixBot.js",
+  "description": "A Twitter Bot that takes your image tweets and turns them into pixel art.",
+  "main": "src/picpixbot.js",
   "scripts": {
-    "start": "node picPixBot.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --exec babel-node --presets env,stage-2 src/picpixbot.js"
   },
-  "keywords": [
-    "twitter",
-    "bot",
-    "image",
-    "processing",
-    "pixels"
-  ],
-  "author": "Kazuya",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hirokazutei/PicPixBot.git"
+  },
+  "author": "Hirokazu Tei",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hirokazutei/PicPixBot/issues"
+  },
+  "homepage": "https://github.com/hirokazutei/PicPixBot#readme",
   "dependencies": {
-    "twit": "^2.2.9"
+    "simple-node-logger": "^0.93.40",
+    "twit": "^2.2.11"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-2": "^6.24.1",
+    "nodemon": "^1.18.6"
   }
 }
