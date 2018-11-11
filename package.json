@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/hirokazutei/PicPixBot#readme",
   "dependencies": {
+    "simple-node-logger": "^0.93.40",
     "twit": "^2.2.11"
   },
   "devDependencies": {

@@ -1,8 +1,7 @@
-/* @flow */
 import Twit from "twit";
 import fs from "fs";
 import request from "request";
-import config from "../key.js";
+import { CREDENTIALS, CONFIG } from "./key";
 import { ERROR_PHRASES, PHRASES } from "./phrases";
 import {
   CMD_LOCAL,
@@ -14,12 +13,16 @@ import {
   SEARCH_PARAMS
 } from "./constants";
 
+// logger
+const log = require("simple-node-logger").createSimpleLogger("project.log");
+log.setLevel("error");
+
 // Require child_process for triggering script for Processing
 const exec = require("child_process").exec;
 
-const T = new Twit(config);
+const T = new Twit(CREDENTIALS);
 const stream = T.stream("statuses/filter", {
-  track: ["picpixbot"]
+  track: "picpixbot"
 });
 stream.on("tweet", tweet => {
   tweetEvent(tweet);
@@ -31,14 +34,18 @@ setInterval(
   TWEET_INTERVAL
 );
 
-function intervalTweet(err, data, res) {
-  for (let tweet of data.statuses) {
-    if (
-      typeof tweet.entities.media !== "undefined" &&
-      tweet.entities.media[0].type == "photo"
-    ) {
-      startProcess(false, tweet);
-      break;
+function intervalTweet(error, data, response) {
+  if (typeof error !== "undefined") {
+    console.error(`Search Error: ${error}`);
+  } else {
+    for (let tweet of data.statuses) {
+      if (
+        typeof tweet.entities.media !== "undefined" &&
+        tweet.entities.media[0].type == "photo"
+      ) {
+        startProcess(false, tweet);
+        break;
+      }
     }
   }
 }
@@ -49,9 +56,9 @@ function tweetEvent(tweet) {
     // Check if it is a mention to the bot
     if (mention === HANDLE_NAME) {
       // Write down the tweet content for processing parameters
-      fs.writeFile("intext.txt", tweet.text, err => {
-        if (err) {
-          console.log(err);
+      fs.writeFile("src/intext.txt", tweet.text, error => {
+        if (error) {
+          console.error(`Write Fle Error!`);
         } else {
           startProcess(true, tweet);
         }
@@ -80,8 +87,11 @@ function startProcess(isMention, tweet) {
     isMention
   };
   const imgURL = params.media[0].media_url;
-  request.head(imgURL, (err, res, body) => {
-    downloadImage(params, imgURL, res);
+  request.head(imgURL, (error, response, body) => {
+    if (error) {
+      console.error(`Request Head Error: ${error}`);
+    }
+    downloadImage(params, imgURL, response);
   });
 }
 
@@ -89,9 +99,9 @@ function downloadImage(params, imgURL, res) {
   const type = res.headers["content-type"];
   request(imgURL)
     .pipe(fs.createWriteStream(INPUT_PATH))
-    .on("close", err => {
-      if (err) {
-        console.log(err);
+    .on("close", error => {
+      if (typeof error !== "undefined") {
+        console.error(`Create Write Stream Error: ${error}`);
       } else {
         processImage(params);
       }
@@ -102,10 +112,10 @@ function processImage(params) {
   // Here is the command to run the Processing sketch
   // You need to have Processing command line installed
   // See: https://github.com/processing/processing/wiki/Command-Line
-  //var cmd = "processing/Sketch_Test";
-  exec(CMD_LOCAL, (error, stdout, stderr) => {
+  const cmd = CONFIG.env === "production" ? CMD_PROD : CMD_LOCAL;
+  exec(cmd, (error, stdout, stderr) => {
     if (error) {
-      console.error(`exec error: ${error}`);
+      console.error(`Command error: ${error}`);
     } else {
       uploadImage(params);
     }
@@ -118,9 +128,17 @@ async function uploadImage(params) {
   const b64content = fs.readFileSync(OUTPUT_PATH, {
     encoding: "base64"
   });
-  await T.post("media/upload", { media_data: b64content }, (err, data, res) => {
-    finalizeTweet(params, data, res);
-  });
+  await T.post(
+    "media/upload",
+    { media_data: b64content },
+    (error, data, response) => {
+      if (typeof error !== "undefined") {
+        console.error(`Tweet Post Error: ${error}`);
+      } else {
+        finalizeTweet(params, data, response);
+      }
+    }
+  );
 }
 
 function finalizeTweet(params, data, response) {
@@ -128,7 +146,7 @@ function finalizeTweet(params, data, response) {
   // with the media attached
   const mediaIdStr = data.media_id_string;
   if (mediaIdStr && (!response || params.name)) {
-    const mention = params.isMention ? `.@ ${params.name} ` : "";
+    const mention = params.isMention ? `.@${params.name} ` : "";
     const content = `${mention}${
       PHRASES[(0, Math.floor(Math.random() * PHRASES.length))]
     } #PicPixBot`;
@@ -149,10 +167,8 @@ function finalizeTweet(params, data, response) {
   }
 }
 
-function tweeted(err, success) {
-  if (err !== undefined) {
-    fs.writeFile("Error.txt", err);
-  } else {
-    console.log(err);
+function tweeted(error, success) {
+  if (typeof error !== "undefined") {
+    console.error(`Tweet Error: ${error}`);
   }
 }
