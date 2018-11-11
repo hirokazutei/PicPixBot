@@ -17,6 +17,7 @@ Note that in order for the program to successfully connect to the Twitter API, y
 #### Parameters
 
 To keep it simple, only 3 parameters were introduced.
+![alt text](https://github.com/hirokazutei/PicPixBot/blob/master/instructionsImages/Instruction%201.png)
 
 ##### A. Pixel Type
 
@@ -31,13 +32,19 @@ To keep it simple, only 3 parameters were introduced.
 1. Stretched Hexagons
 1. Custom Arranged
 
+![alt text](https://github.com/hirokazutei/PicPixBot/blob/master/instructionsImages/Instruction%202.png)
+
 ##### B. Pixel Size
 
 Controls the size of the pixels.
 
+![alt text](https://github.com/hirokazutei/PicPixBot/blob/master/instructionsImages/Instruction%203.png)
+
 ##### C. Pixel Color Number
 
 The number of colors the program attempts to cluster the available colors of the picture into. The larger the number, the wider range of colors will be used, while 2 will be a binary image of two colors.
+
+![alt text](https://github.com/hirokazutei/PicPixBot/blob/master/instructionsImages/Instruction%204.png)
 
 ## Why it was made?
 
