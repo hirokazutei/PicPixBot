@@ -162,7 +162,7 @@ function finalizeTweet(params, data, response) {
   // with the media attached
   const mediaIdStr = data.media_id_string;
   if (mediaIdStr && (!response || params.name)) {
-    const mention = params.isMention ? `.@${params.name} ` : "";
+    const mention = params.isMention ? `@${params.name} ` : "";
     const content = `${mention}${
       PHRASES[(0, Math.floor(Math.random() * PHRASES.length))]
     } #PicPixBot`;
