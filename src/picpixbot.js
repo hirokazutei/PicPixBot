@@ -1,9 +1,9 @@
-import Twit from 'twit';
-import fs from 'fs';
-import request from 'request';
-import { CREDENTIALS, CONFIG } from './key';
-import { ERROR_PHRASES, PHRASES } from './phrases';
-import { getRandomInt } from './helpers';
+import Twit from "twit";
+import fs from "fs";
+import request from "request";
+import { CREDENTIALS, CONFIG } from "./key";
+import { ERROR_PHRASES, PHRASES } from "./phrases";
+import { getRandomInt } from "./helpers";
 import {
   CMD_LOCAL,
   CMD_PROD,
@@ -14,46 +14,46 @@ import {
   RANDOM_SIZE,
   RANDOM_SAMPLE,
   SEARCH_PARAMS,
-  TWEET_INTERVAL,
-} from './constants';
-import { format } from 'url';
+  TWEET_INTERVAL
+} from "./constants";
+import { format } from "url";
 
 // logger
-const log = require('simple-node-logger').createSimpleLogger('project.log');
-log.setLevel('error');
+const log = require("simple-node-logger").createSimpleLogger("project.log");
+log.setLevel("error");
 
 // Require child_process for triggering script for Processing
-const exec = require('child_process').exec;
+const exec = require("child_process").exec;
 
 const T = new Twit(CREDENTIALS);
-const stream = T.stream('statuses/filter', {
-  track: 'picpixbot',
+const stream = T.stream("statuses/filter", {
+  track: "picpixbot"
 });
-stream.on('tweet', (tweet) => {
+stream.on("tweet", tweet => {
   tweetEvent(tweet);
 });
 
 // Set Interval to tweet something from a image twitter page
 setInterval(
-  () => T.get('search/tweets', SEARCH_PARAMS, intervalTweet),
+  () => T.get("search/tweets", SEARCH_PARAMS, intervalTweet),
   TWEET_INTERVAL
 );
 
 function intervalTweet(error, data, response) {
-  if (typeof error !== 'undefined') {
+  if (typeof error !== "undefined") {
     console.error(`Search Error: ${error}`);
   } else {
     for (let tweet of data.statuses) {
       if (
-        typeof tweet.entities.media !== 'undefined' &&
-        tweet.entities.media[0].type == 'photo'
+        typeof tweet.entities.media !== "undefined" &&
+        tweet.entities.media[0].type == "photo"
       ) {
         const randomType = getRandomInt(RANDOM_TYPE[0], RANDOM_TYPE[1]);
         const randomSize = getRandomInt(RANDOM_SIZE[0], RANDOM_SIZE[1]);
         const randomSample = getRandomInt(RANDOM_SAMPLE[0], RANDOM_SAMPLE[1]);
         const randomText = `@picpixbot ${randomType} ${randomSize} ${randomSample}`;
         // This is just to control random samples without changing processing file
-        fs.writeFile('src/intext.txt', randomText, (error) => {
+        fs.writeFile("src/intext.txt", randomText, error => {
           if (error) {
             console.error(`Write Fle Error!`);
           } else {
@@ -72,7 +72,7 @@ function tweetEvent(tweet) {
     // Check if it is a mention to the bot
     if (mention === HANDLE_NAME) {
       // Write down the tweet content for processing parameters
-      fs.writeFile('src/intext.txt', tweet.text, (error) => {
+      fs.writeFile("src/intext.txt", tweet.text, error => {
         if (error) {
           console.error(`Write Fle Error!`);
         } else {
@@ -81,12 +81,12 @@ function tweetEvent(tweet) {
       });
     } else {
       T.post(
-        'statuses/update',
+        "statuses/update",
         {
           status: `${
             ERROR_PHRASES[(0, Math.floor(Math.random() * ERROR_PHRASES.length))]
           }\n(Whoops. Something went wrong. Please try again!) #PicPixBot`,
-          in_reply_to_status_id: tweet.id_str,
+          in_reply_to_status_id: tweet.id_str
         },
         tweeted
       );
@@ -100,7 +100,7 @@ function startProcess(isMention, tweet) {
     text: tweet.text,
     media: tweet.entities.media,
     id: tweet.id_str,
-    isMention,
+    isMention
   };
   const imgURL = params.media[0].media_url;
   request.head(imgURL, (error, response, body) => {
@@ -112,11 +112,11 @@ function startProcess(isMention, tweet) {
 }
 
 function downloadImage(params, imgURL, res) {
-  const type = res.headers['content-type'];
+  const type = res.headers["content-type"];
   request(imgURL)
     .pipe(fs.createWriteStream(INPUT_PATH))
-    .on('close', (error) => {
-      if (typeof error !== 'undefined') {
+    .on("close", error => {
+      if (typeof error !== "undefined") {
         console.error(`Create Write Stream Error: ${error}`);
       } else {
         processImage(params);
@@ -128,7 +128,7 @@ function processImage(params) {
   // Here is the command to run the Processing sketch
   // You need to have Processing command line installed
   // See: https://github.com/processing/processing/wiki/Command-Line
-  const cmd = CONFIG.env === 'production' ? CMD_PROD : CMD_LOCAL;
+  const cmd = CONFIG.env === "production" ? CMD_PROD : CMD_LOCAL;
   exec(cmd, (error, stdout, stderr) => {
     if (error) {
       console.error(`Command error: ${error}`);
@@ -142,13 +142,13 @@ function processImage(params) {
 async function uploadImage(params) {
   // Read the file made by Processing
   const b64content = fs.readFileSync(OUTPUT_PATH, {
-    encoding: 'base64',
+    encoding: "base64"
   });
   await T.post(
-    'media/upload',
+    "media/upload",
     { media_data: b64content },
     (error, data, response) => {
-      if (typeof error !== 'undefined') {
+      if (typeof error !== "undefined") {
         console.error(`Tweet Post Error: ${error}`);
       } else {
         finalizeTweet(params, data, response);
@@ -162,29 +162,29 @@ function finalizeTweet(params, data, response) {
   // with the media attached
   const mediaIdStr = data.media_id_string;
   if (mediaIdStr && (!response || params.name)) {
-    const mention = params.isMention ? `.@${params.name} ` : '';
+    const mention = params.isMention ? `.@${params.name} ` : "";
     const content = `${mention}${
       PHRASES[(0, Math.floor(Math.random() * PHRASES.length))]
     } #PicPixBot`;
 
     const payload = {
       status: content,
-      media_ids: [mediaIdStr],
+      media_ids: [mediaIdStr]
     };
-    T.post('statuses/update', payload, tweeted);
+    T.post("statuses/update", payload, tweeted);
   } else {
     const errorContent = `${
       ERROR_PHRASES[(0, Math.floor(Math.random() * ERROR_PHRASES.length))]
     } \n(Whoops. Something went wrong. Please try again in a few seconds!) #PicPixBot`;
     const payload = {
-      status: errorContent,
+      status: errorContent
     };
-    T.post('statuses/update', payload, tweeted);
+    T.post("statuses/update", payload, tweeted);
   }
 }
 
 function tweeted(error, success) {
-  if (typeof error !== 'undefined') {
+  if (typeof error !== "undefined") {
     console.error(`Tweet Error: ${error}`);
   }
 }
