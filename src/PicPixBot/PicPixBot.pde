@@ -28,7 +28,7 @@ void setup() {
    4. Cluster Number: 0 for No Cluster
    5. Image Link
    */
-
+  println(strparameters);
   if (strparameters.length < 4) {
     problem = true;
   } else {
@@ -53,9 +53,6 @@ void setup() {
 }
 
 void draw() {
-  pixeltype = 2;
-  samplesize = 7;
-  clusternum = 120;
   outimg.beginDraw();
   outimg.colorMode(RGB, 100);
   outimg.background(0, 0, 0);
