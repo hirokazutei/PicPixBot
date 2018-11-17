@@ -26,10 +26,12 @@ log.setLevel("error");
 const exec = require("child_process").exec;
 
 const T = new Twit(CREDENTIALS);
-const stream = T.stream("statuses/filter", {
+
+// Process and Tweet a picture when users tweet a picture at @picpixbot
+const tweetStream = T.stream("statuses/filter", {
   track: "picpixbot"
 });
-stream.on("tweet", tweet => {
+tweetStream.on("tweet", tweet => {
   tweetEvent(tweet);
 });
 
@@ -40,28 +42,34 @@ setInterval(
 );
 
 function intervalTweet(error, data, response) {
-  if (typeof error !== "undefined") {
+  if (typeof error !== "undefined" || typeof data === "undefined") {
     console.error(`Search Error: ${error}`);
   } else {
-    for (let tweet of data.statuses) {
+    const validTweets = [];
+    for (let i = 0; i < data.statuses.length; i++) {
       if (
-        typeof tweet.entities.media !== "undefined" &&
-        tweet.entities.media[0].type == "photo"
+        typeof data.statuses[i].entities.media !== "undefined" &&
+        data.statuses[i].entities.media[0].type == "photo"
       ) {
-        const randomType = getRandomInt(RANDOM_TYPE[0], RANDOM_TYPE[1]);
-        const randomSize = getRandomInt(RANDOM_SIZE[0], RANDOM_SIZE[1]);
-        const randomSample = getRandomInt(RANDOM_SAMPLE[0], RANDOM_SAMPLE[1]);
-        const randomText = `@picpixbot ${randomType} ${randomSize} ${randomSample}`;
-        // This is just to control random samples without changing processing file
-        fs.writeFile("src/intext.txt", randomText, error => {
-          if (error) {
-            console.error(`Write Fle Error!`);
-          } else {
-            startProcess(false, tweet);
-          }
-        });
-        break;
+        validTweets.push(data.statuses[i]);
       }
+    }
+    if (validTweets.length > 0) {
+      const randomType = getRandomInt(RANDOM_TYPE[0], RANDOM_TYPE[1]);
+      const randomSize = getRandomInt(RANDOM_SIZE[0], RANDOM_SIZE[1]);
+      const randomSample = getRandomInt(RANDOM_SAMPLE[0], RANDOM_SAMPLE[1]);
+      const randomText = `@picpixbot ${randomType} ${randomSize} ${randomSample}`;
+      // This is just to control random samples without changing processing file
+      fs.writeFile("src/intext.txt", randomText, error => {
+        if (error) {
+          console.error(`Write Fle Error!`);
+        } else {
+          startProcess(
+            false,
+            validTweets[getRandomInt(0, validTweets.length - 1)]
+          );
+        }
+      });
     }
   }
 }
@@ -104,15 +112,15 @@ function startProcess(isMention, tweet) {
   };
   const imgURL = params.media[0].media_url;
   request.head(imgURL, (error, response, body) => {
-    if (error) {
+    if (error || typeof response === "undefined") {
       console.error(`Request Head Error: ${error}`);
     }
     downloadImage(params, imgURL, response);
   });
 }
 
-function downloadImage(params, imgURL, res) {
-  const type = res.headers["content-type"];
+function downloadImage(params, imgURL, response) {
+  const type = response.headers["content-type"];
   request(imgURL)
     .pipe(fs.createWriteStream(INPUT_PATH))
     .on("close", error => {
@@ -163,9 +171,10 @@ function finalizeTweet(params, data, response) {
   const mediaIdStr = data.media_id_string;
   if (mediaIdStr && (!response || params.name)) {
     const mention = params.isMention ? `@${params.name} ` : "";
+    const credit = params.isMention ? "" : `credit: @${params.name}`;
     const content = `${mention}${
       PHRASES[(0, Math.floor(Math.random() * PHRASES.length))]
-    } #PicPixBot`;
+    } ${credit} #PicPixBot`;
 
     const payload = {
       status: content,

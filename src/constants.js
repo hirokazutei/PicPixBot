@@ -12,7 +12,7 @@ export const RANDOM_TYPE = [0, 10];
 export const RANDOM_SIZE = [3, 20];
 export const RANDOM_SAMPLE = [2, 50];
 export const SEARCH_PARAMS = {
-  q: "#naturephotography",
+  q: "#nature",
   count: 100
 };
-export const TWEET_INTERVAL = 1000 * 60 * 60 * 7.5;
+export const TWEET_INTERVAL = 1000 * 60 * 60 * 7;
